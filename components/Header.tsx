@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 
 const Header = () => {
   return (
@@ -29,6 +30,16 @@ const Header = () => {
                   <Button variant="ghost">Admin</Button>
                 </Link>
               </li>
+              <SignedIn>
+                <li className="flex items-center cursor-pointer">
+                  <UserButton />
+                </li>
+              </SignedIn>
+              <SignedOut>
+                <li className="flex items-center rounded bg-black px-2 font-bold text-white">
+                  <SignInButton mode="modal" />
+                </li>
+              </SignedOut>
             </ul>
           </nav>
         </div>

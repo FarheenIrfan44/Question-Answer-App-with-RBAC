@@ -6,6 +6,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import AnswerItem from './AnswerItem'
 import { formatDate } from '@/lib/utils'
+import { useUser } from '@clerk/nextjs'
 
 interface Props {
   question: Question
@@ -24,6 +25,7 @@ export default function QuestionItem({
   onEditAnswer,
   onDeleteAnswer,
 }: Props) {
+  const { user } = useUser()
   const [answer, setAnswer] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [editedQuestion, setEditedQuestion] = useState(question.quiz)
@@ -89,18 +91,20 @@ export default function QuestionItem({
             <div className="mb-2 flex items-center justify-between">
               <CardTitle>{question.quiz}</CardTitle>
 
-              <div>
-                <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => question.id !== null && onDeleteQuestion(question.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
+              {user?.id === question.contributorId && (
+                <div>
+                  <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => question.id !== null && onDeleteQuestion(question.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
             </div>
             <div className="text-sm text-gray-500">
               <span>{question.contributor}</span>

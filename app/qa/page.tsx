@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import QuestionForm from '../components/QuestionForm'
 import QuestionItem from '../components/QuestionItem'
 import Header from '../../components/Header'
+import * as actions from '../../app/qa/actions'
 
 export default function QAPage() {
   const [questions, setQuestions] = useState<Question[]>([])
@@ -13,13 +14,40 @@ export default function QAPage() {
   }, [])
 
   // These placeholders will be populated later in this guide
-  const fetchQuestions = async () => {}
-  const addQuestion = async (question: string) => {}
-  const editQuestion = async (id: number, newText: string) => {}
-  const deleteQuestion = async (id: number) => {}
-  const addAnswer = async (questionId: number, answer: string) => {}
-  const editAnswer = async (answerId: number, newText: string) => {}
-  const deleteAnswer = async (answerId: number) => {}
+ const fetchQuestions = async () => {
+    const questions = await actions.getAllQuestions()
+    setQuestions(questions)
+  }
+
+  const addQuestion = async (quiz: string) => {
+    await actions.createQuestion(quiz)
+    fetchQuestions()
+  }
+
+  const editQuestion = async (id: number, newText: string) => {
+    await actions.updateQuestion(id, newText)
+    fetchQuestions()
+  }
+
+  const deleteQuestion = async (id: number) => {
+    await actions.deleteQuestion(id)
+    fetchQuestions()
+  }
+
+  const addAnswer = async (questionId: number, answer: string) => {
+    await actions.createAnswer(answer, questionId)
+    fetchQuestions()
+  }
+
+  const editAnswer = async (answerId: number, newText: string) => {
+    await actions.updateAnswer(answerId, newText)
+    fetchQuestions()
+  }
+
+  const deleteAnswer = async (answerId: number) => {
+    await actions.deleteAnswer(answerId)
+    fetchQuestions()
+  }
 
   return (
     <div className="flex min-h-screen flex-col">

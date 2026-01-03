@@ -5,6 +5,13 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import QuestionCard from '../components/QuestionCard'
+import {
+  approveQuestion,
+  disapproveQuestion,
+  getAllQuestionsWithAnswers,
+  approveAnswer,
+  disapproveAnswer,
+} from './actions'
 
 export default function AdminPage() {
   const [questions, setQuestions] = useState<Question[]>([])
@@ -13,12 +20,31 @@ export default function AdminPage() {
     fetchQuestions()
   }, [])
 
-  // These placeholders will be populated later in this guide
-  const fetchQuestions = async () => {}
-  const onQuestionApproved = async (id: number) => {}
-  const onQuestionDisapproved = async (id: number) => {}
-  const onAnswerApproved = async (answerId: number) => {}
-  const onAnswerDisapproved = async (answerId: number) => {}
+
+  const fetchQuestions = async () => {
+    const questions = await getAllQuestionsWithAnswers()
+    setQuestions(questions)
+  }
+
+  const onQuestionApproved = async (id: number) => {
+    await approveQuestion(id)
+    fetchQuestions()
+  }
+
+  const onQuestionDisapproved = async (id: number) => {
+    await disapproveQuestion(id)
+    fetchQuestions()
+  }
+
+  const onAnswerApproved = async (answerId: number) => {
+    await approveAnswer(answerId)
+    fetchQuestions()
+  }
+
+  const onAnswerDisapproved = async (answerId: number) => {
+    await disapproveAnswer(answerId)
+    fetchQuestions()
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
