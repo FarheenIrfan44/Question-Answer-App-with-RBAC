@@ -5,6 +5,7 @@ import QuestionForm from '../components/QuestionForm'
 import QuestionItem from '../components/QuestionItem'
 import Header from '../../components/Header'
 import * as actions from '../../app/qa/actions'
+//import { revalidatePath } from 'next/cache'
 
 export default function QAPage() {
   const [questions, setQuestions] = useState<Question[]>([])
@@ -22,6 +23,7 @@ export default function QAPage() {
   const addQuestion = async (quiz: string) => {
     await actions.createQuestion(quiz)
     fetchQuestions()
+    //revalidatePath("/qa")
   }
 
   const editQuestion = async (id: number, newText: string) => {

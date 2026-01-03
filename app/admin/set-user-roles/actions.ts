@@ -1,6 +1,7 @@
 'use server'
 
 import { clerkClient } from '@clerk/nextjs/server'
+import { revalidatePath } from 'next/cache'
 //import { checkRole } from './utils'
 
 export async function setRole(formData: FormData): Promise<void> {
@@ -11,6 +12,7 @@ export async function setRole(formData: FormData): Promise<void> {
       publicMetadata: { role: formData.get('role') },
     })
     console.log({ message: res.publicMetadata })
+    revalidatePath('/admin')
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : String(err))
   }
@@ -24,6 +26,7 @@ export async function removeRole(formData: FormData): Promise<void> {
       publicMetadata: { role: null },
     })
     console.log({ message: res.publicMetadata })
+    revalidatePath('/admin')
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : String(err))
   }

@@ -74,11 +74,13 @@ export const deleteQuestion = async (id: number) => {
   if (!user) {
     throw new Error('Unauthorized')
   }
+    const isAdmin = user.publicMetadata?.role === 'admin'
+ try {
+    const filter = isAdmin 
+      ? eq(questions.id, id) 
+      : and(eq(questions.id, id), eq(questions.contributorId, user.id)) // User only theirs
 
-  try {
-    const result = await db
-      .delete(questions)
-      .where(and(eq(questions.id, id), eq(questions.contributorId, user.id)))
+    const result = await db.delete(questions).where(filter)
     return result
   } catch (error) {
     console.error('Error deleting question:', error)
@@ -93,8 +95,14 @@ export const deleteAnswer = async (id: number) => {
     throw new Error('Unauthorized')
   }
 
+  const isAdmin = user.publicMetadata?.role === 'admin'
+
   try {
-    await db.delete(answers).where(and(eq(answers.id, id), eq(answers.contributorId, user.id)))
+    const filter = isAdmin 
+      ? eq(answers.id, id) 
+      : and(eq(answers.id, id), eq(answers.contributorId, user.id))
+
+    await db.delete(answers).where(filter)
   } catch (error) {
     console.error('Error deleting answer:', error)
     throw new Error('Failed to delete answer')
