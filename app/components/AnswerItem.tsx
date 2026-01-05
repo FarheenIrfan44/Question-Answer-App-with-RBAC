@@ -41,7 +41,8 @@ function AnswerItem({ answer, onEditAnswer, onDeleteAnswer }: Props) {
         <div className="space-y-2">
           <div className="flex items-start justify-between">
             <p>{answer.ans}</p>
-            {user?.id === answer.contributorId && (
+            {(user?.id === answer.contributorId || 
+  user?.publicMetadata?.role === 'admin') && (
               <div>
                 <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
                   <Pencil className="h-4 w-4" />

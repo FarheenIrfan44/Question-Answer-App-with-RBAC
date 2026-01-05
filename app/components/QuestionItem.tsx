@@ -91,7 +91,8 @@ export default function QuestionItem({
             <div className="mb-2 flex items-center justify-between">
               <CardTitle>{question.quiz}</CardTitle>
 
-              {user?.id === question.contributorId && (
+              {(user?.id === question.contributorId || 
+  user?.publicMetadata?.role === 'admin') && (
                 <div>
                   <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
                     <Pencil className="h-4 w-4" />

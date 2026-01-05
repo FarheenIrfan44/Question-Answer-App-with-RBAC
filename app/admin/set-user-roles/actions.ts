@@ -1,10 +1,14 @@
 'use server'
 
-import { clerkClient } from '@clerk/nextjs/server'
+import { clerkClient,auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 //import { checkRole } from './utils'
 
 export async function setRole(formData: FormData): Promise<void> {
+    const { sessionClaims } = await auth();
+    if (sessionClaims?.metadata?.role !== 'admin') {
+    throw new Error("Forbidden: Only Admins can modify roles.");
+  }
   const client = await clerkClient()
 
   try {
